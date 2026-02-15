@@ -307,7 +307,7 @@ function Signup() {
         </button>
 
         <div style={styles.footerNote}>
-          Already have an account? <a href="/login">Sign in</a>
+          Already have an account? <a href="/pages/SignIn">Sign in</a>
         </div>
       </form>
     </div>

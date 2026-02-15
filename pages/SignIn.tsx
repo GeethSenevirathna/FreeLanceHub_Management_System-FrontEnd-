@@ -1,17 +1,26 @@
-import { useState, useContext } from "react";
+import React, {useState, useContext, useEffect} from "react";
 import type { LoginRequest } from "../types/auth";
 import { login as loginApi } from "../services/AuthService";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import {loginWithGoogle} from "../services/GoogleAuthService";
 
-const Login = () => {
+declare global{
+    interface Window{
+        google:any;
+    }
+}
+const SignIn = () => {
     const [form, setForm] = useState<LoginRequest>({email: "", password: ""});
     const {login} = useContext(AuthContext);
     const navigate = useNavigate();
 
+
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({...form, [e.target.name]: e.target.value});
     };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -20,10 +29,39 @@ const Login = () => {
             login(response); // sets token in localStorage
             navigate("/dashboard");
         } catch (error) {
-            alert("Login failed");
+            alert("SignIn failed");
             console.error(error);
         }
     };
+
+    const handleGoogleResponse = async (response: any) => {
+        try {
+            const data = await loginWithGoogle(response.credential);
+
+            login(data); // save token in context + localStorage
+            navigate("/dashboard");
+        } catch (error) {
+            console.error(error);
+            alert("Google login failed");
+        }
+    };
+    useEffect(() => {
+        if (window.google) {
+            window.google.accounts.id.initialize({
+                client_id: "962166256032-8m16o8ndt8mi5g2b9blbj5s5mecnf0b8.apps.googleusercontent.com",
+                callback: handleGoogleResponse,
+            });
+
+            window.google.accounts.id.renderButton(
+                document.getElementById("googleButton"),
+                {
+                    theme: "outline",
+                    size: "large",
+                    width: 250,
+                }
+            );
+        }
+    }, []);
 
     return (
         <div style={styles.container}>
@@ -58,7 +96,7 @@ const Login = () => {
                 <div style={styles.divider}>OR</div>
 
                 {/* Google Button */}
-                <button style={styles.googleButton}>
+                <button id="googleButton" style={styles.googleButton}>
     <span style={styles.googleContent}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -176,4 +214,4 @@ const styles: { [key: string]: React.CSSProperties } = {
     };
 
 
-    export default Login;
+    export default SignIn;

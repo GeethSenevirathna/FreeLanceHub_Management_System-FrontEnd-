@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import type { JSX } from "react";
 import { AuthContext } from "./context/AuthContext";
-import Login from "./pages/Login";
+import SignIn from "./pages/SignIn";
 
 
 // Temporary Dashboard Component
@@ -19,11 +19,13 @@ const Dashboard = () => {
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    const { token } = useContext(AuthContext);
+    const { token } = useContext(AuthContext); //checks if the user is logged in
 
     if (!token) {
         return <Navigate to="/login" />;
     }
+    // the protection offered by ProtectRoute is anyone could type localhost:5173/dashboard and log into the dashbard,
+    // it is blocked by the ProtectRoute
 
     return children;
 };
@@ -31,16 +33,16 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 
 function App() {
-    const { token } = useContext(AuthContext);
+    const { token } = useContext(AuthContext); // also reads to control the app behaviour
 
     return (
         <BrowserRouter>
             <Routes>
-                {/* Login Route */}
+                {/* SignIn Route */}
                 <Route
                     path="/login"
                     element={
-                        token ? <Navigate to="/dashboard" /> : <Login />
+                        token ? <Navigate to="/dashboard" /> : <SignIn />
                     }
                 />
 
