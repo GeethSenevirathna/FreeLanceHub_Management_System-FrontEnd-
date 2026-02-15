@@ -48,7 +48,7 @@ const SignIn = () => {
     useEffect(() => {
         if (window.google) {
             window.google.accounts.id.initialize({
-                client_id: "962166256032-8m16o8ndt8mi5g2b9blbj5s5mecnf0b8.apps.googleusercontent.com",
+                client_id: "962166256032-k7ihoni7cj63qtmnbpqg8cs2b3sap5qn.apps.googleusercontent.com",
                 callback: handleGoogleResponse,
             });
 
@@ -58,6 +58,7 @@ const SignIn = () => {
                     theme: "outline",
                     size: "large",
                     width: 250,
+                    locale: "en",
                 }
             );
         }
