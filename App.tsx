@@ -45,6 +45,12 @@ function App() {
                         token ? <Navigate to="/dashboard" /> : <SignIn />
                     }
                 />
+                <Route
+                    path="/signup"
+                    element={
+                        token ? <Navigate to="/dashboard" /> : <SignUp />
+                    }
+                />
 
                 {/* Protected Dashboard */}
                 <Route

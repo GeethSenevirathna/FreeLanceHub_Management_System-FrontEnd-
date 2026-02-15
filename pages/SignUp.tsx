@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { SignupErrors } from "../types/signup";
 import { signupUser, signupWithGoogle } from "../services/signupService";
+import {useNavigate} from "react-router-dom";
 
 declare global {
     interface Window {
@@ -18,6 +19,7 @@ function Signup() {
     const [errors, setErrors] = useState<SignupErrors>({});
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const validateEmail = (value: string) =>
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -252,7 +254,13 @@ function Signup() {
                 </button>
 
                 <div style={styles.footerNote}>
-                    Already have an account? <a href="/FreeLanceHub_Management_System-FrontEnd-/pages/SignIn">Sign in</a>
+                    Already have an account?{" "}
+                    <span
+                        style={{color:"blue",cursor:"pointer"}}
+                        onClick={() => navigate("/login")}
+                        >
+                        Sign in
+                    </span>
                 </div>
             </form>
         </div>

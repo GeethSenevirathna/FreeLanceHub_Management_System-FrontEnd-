@@ -125,7 +125,7 @@ const SignIn = () => {
                     New here?{" "}
                     <span
                         style={styles.registerLink}
-                        onClick={() => navigate("/register")}
+                        onClick={() => navigate("/signup")}
                     >
                     Create an account
                 </span>
