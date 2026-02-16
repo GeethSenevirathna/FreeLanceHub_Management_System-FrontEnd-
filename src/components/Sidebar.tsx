@@ -1,9 +1,11 @@
 import React from "react";
 import { useFreelancer } from "../context/FreelancerContext";
 
+export type SectionType = "dashboard" | "jobs" | "contracts" | "earnings" | "my-jobs" | "financials";
+
 interface SidebarProps {
-  activeSection: "dashboard" | "projects" | "clients" | "messages" | "earnings";
-  setActiveSection: (section: "dashboard" | "projects" | "clients" | "messages" | "earnings") => void;
+  activeSection: SectionType;
+  setActiveSection: (section: SectionType) => void;
   onLogout: () => void;
 }
 
@@ -17,8 +19,6 @@ const styles: { [k: string]: React.CSSProperties } = {
   logoutBtn: { background: "#ef4444", color: "white", padding: "10px 16px", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600, fontSize: 13 },
 };
 
-type SectionType = "dashboard" | "projects" | "clients" | "messages" | "earnings";
-
 export function Sidebar({ activeSection, setActiveSection, onLogout }: SidebarProps) {
   const { freelancer } = useFreelancer();
 
@@ -30,19 +30,27 @@ export function Sidebar({ activeSection, setActiveSection, onLogout }: SidebarPr
     .join("")
     .toUpperCase();
 
-  const navItems: { label: string; icon: string; key: SectionType }[] = [
-    { label: "Dashboard", icon: "📊", key: "dashboard" },
-    { label: "My Projects", icon: "📁", key: "projects" },
-    { label: "Clients", icon: "👥", key: "clients" },
-    { label: "Messages", icon: "💬", key: "messages" },
-    { label: "Earnings", icon: "💰", key: "earnings" },
-  ];
+  const isClient = freelancer.role === "client";
+
+  const navItems: { label: string; icon: string; key: SectionType }[] = isClient
+    ? [
+        { label: "Dashboard", icon: "📊", key: "dashboard" },
+        { label: "My Jobs", icon: "📢", key: "my-jobs" },
+        { label: "Contracts", icon: "📜", key: "contracts" },
+        { label: "Financials", icon: "💳", key: "financials" },
+      ]
+    : [
+        { label: "Dashboard", icon: "📊", key: "dashboard" },
+        { label: "Find Work", icon: "💼", key: "jobs" },
+        { label: "Contracts", icon: "📜", key: "contracts" },
+        { label: "Earnings", icon: "💰", key: "earnings" },
+      ];
 
   return (
     <aside style={styles.sidebar}>
       <div style={styles.logo}>FL</div>
       <h3 style={{ margin: "16px 0 6px", fontSize: 16, fontWeight: 700, color: "white" }}>Freelancer Hub</h3>
-      <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>Manage your projects</p>
+      <p style={{ margin: 0, fontSize: 12, color: "#94a3b8" }}>{isClient ? "Client Workspace" : "Freelancer Workspace"}</p>
 
       <div style={styles.userSection}>
         <div style={styles.userAvatar}>{initials}</div>

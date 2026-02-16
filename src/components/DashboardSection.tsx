@@ -20,7 +20,7 @@ interface DashboardSectionProps {
 
 const styles: { [k: string]: React.CSSProperties } = {
   header: { marginBottom: 48, width: "100%", display: "flex", flexDirection: "column" },
-  statsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 24, marginBottom: 40, width: "100%" },
+  statsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24, marginBottom: 40, width: "100%" },
   projectSection: { background: "white", borderRadius: 14, padding: 36, boxShadow: "0 1px 3px rgba(0,0,0,0.08)", marginBottom: 32, flex: 1, display: "flex", flexDirection: "column", width: "100%", boxSizing: "border-box" },
   projectHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28, flexWrap: "wrap", gap: 20, width: "100%" },
   filterButtons: { display: "flex", gap: 8 },
@@ -60,13 +60,12 @@ export function DashboardSection({ projects, freelancerName }: DashboardSectionP
         <StatCard label="Total Earned" value={`$${totalEarned.toLocaleString()}`} subtext="All time" />
         <StatCard label="Active Projects" value={inProgressCount} subtext="In progress" />
         <StatCard label="Completed" value={completedCount} subtext="This month" />
-        <StatCard label="Profile Rating" value="4.9" subtext="out of 5 stars" />
       </section>
 
       <section style={styles.projectSection}>
         <div style={styles.projectHeader}>
           <div>
-            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Your Projects</h2>
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Active Contracts</h2>
             <p style={{ margin: "6px 0 0", color: "#6b7280", fontSize: 13 }}>Track and manage all your active and completed work</p>
           </div>
           <div style={styles.filterButtons}>

@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useFreelancer } from "../context/FreelancerContext";
-import { Sidebar } from "../components/Sidebar";
+import { Sidebar, type SectionType } from "../components/Sidebar";
 import { DashboardSection } from "../components/DashboardSection";
 import { ProjectsSection } from "../components/ProjectsSection";
-import { ClientsSection } from "../components/ClientsSection";
-import { MessagesSection } from "../components/MessagesSection";
 import { EarningsSection } from "../components/EarningsSection";
 
 type Project = {
@@ -27,7 +25,7 @@ const mockProjects: Project[] = [
 
 function FreelancerDashboard(): React.ReactElement {
   const { freelancer, logout } = useFreelancer();
-  const [activeSection, setActiveSection] = useState<"dashboard" | "projects" | "clients" | "messages" | "earnings">("dashboard");
+  const [activeSection, setActiveSection] = useState<SectionType>("dashboard");
 
   if (!freelancer) {
     return (
@@ -53,6 +51,7 @@ function FreelancerDashboard(): React.ReactElement {
   const rootStyle: React.CSSProperties = {
     display: "flex",
     height: "100vh",
+    width: "100vw",
     fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
     background: "#f8fafc",
     overflow: "hidden",
@@ -64,9 +63,18 @@ function FreelancerDashboard(): React.ReactElement {
 
       <main style={mainStyle}>
         {activeSection === "dashboard" && <DashboardSection projects={mockProjects} freelancerName={freelancer.name} />}
-        {activeSection === "projects" && <ProjectsSection projects={mockProjects} />}
-        {activeSection === "clients" && <ClientsSection />}
-        {activeSection === "messages" && <MessagesSection />}
+        {activeSection === "jobs" && (
+          <div>
+            <header style={{ marginBottom: 48 }}>
+              <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>Find Work</h1>
+              <p style={{ margin: "6px 0 0", color: "#6b7280", fontSize: 14 }}>Browse new opportunities matching your skills</p>
+            </header>
+            <div style={{ padding: 40, textAlign: "center", background: "white", borderRadius: 14, border: "1px solid #e2e8f0", color: "#64748b" }}>
+              No jobs available at the moment. Check back later.
+            </div>
+          </div>
+        )}
+        {activeSection === "contracts" && <ProjectsSection projects={mockProjects} />}
         {activeSection === "earnings" && <EarningsSection projects={mockProjects} />}
       </main>
     </div>

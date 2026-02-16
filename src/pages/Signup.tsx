@@ -17,8 +17,13 @@ declare global {
 
 }
 
-function Signup() {
+interface SignupProps {
+  onBack?: () => void;
+}
+
+function Signup({ onBack }: SignupProps) {
   const { setFreelancer } = useFreelancer();
+  const [step, setStep] = useState<"form" | "role">("form");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,20 +69,7 @@ function Signup() {
     try {
       // Simulate API call — replace with real API integration
       await new Promise((res) => setTimeout(res, 900));
-      
-      // Store freelancer data to context and localStorage
-      const freelancerId = `freelancer_${Date.now()}`;
-      setFreelancer({
-        id: freelancerId,
-        name,
-        email,
-        title: "Full-Stack Developer",
-        totalEarned: 12500,
-        completionRate: 95,
-        activeProjects: 5,
-      });
-      
-      setSuccess("Account created successfully! Moving to dashboard...");
+      setStep("role");
       
       // Clear form
       setName("");
@@ -92,6 +84,20 @@ function Signup() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRoleSelect = (role: "freelancer" | "client") => {
+    const freelancerId = `user_${Date.now()}`;
+    setFreelancer({
+      id: freelancerId,
+      name,
+      email,
+      role,
+      title: role === "freelancer" ? "Full-Stack Developer" : "Client Account",
+      totalEarned: role === "freelancer" ? 0 : 0,
+      completionRate: 0,
+      activeProjects: 0,
+    });
   };
 
   // --- Google Identity Services (client-side) ---
@@ -199,8 +205,44 @@ function Signup() {
     }
   };
 
+  if (step === "role") {
+    return (
+      <div style={styles.container}>
+        <div style={styles.form}>
+          <h2 style={{ ...styles.heading, textAlign: "center" }}>Choose your role</h2>
+          <p style={{ textAlign: "center", color: "#64748b", marginBottom: "32px" }}>
+            How do you plan to use FreelancerHub?
+          </p>
+          
+          <div style={styles.roleContainer}>
+            <button onClick={() => handleRoleSelect("freelancer")} style={styles.roleCard}>
+              <div style={styles.roleIcon}>💻</div>
+              <h3 style={styles.roleTitle}>I am a Freelancer</h3>
+              <p style={styles.roleDesc}>I want to find work and manage my projects.</p>
+            </button>
+            
+            <button onClick={() => handleRoleSelect("client")} style={styles.roleCard}>
+              <div style={styles.roleIcon}>🚀</div>
+              <h3 style={styles.roleTitle}>I am a Client</h3>
+              <p style={styles.roleDesc}>I want to hire talent and manage contracts.</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={styles.container}>
+      {onBack && (
+        <button
+          type="button"
+          onClick={onBack}
+          style={styles.backBtn}
+        >
+          ← Back
+        </button>
+      )}
       <form onSubmit={handleSubmit} style={styles.form} noValidate aria-labelledby="signup-heading">
         <h2 id="signup-heading" style={styles.heading}>Create your account</h2>
 
@@ -356,6 +398,18 @@ const styles: { [key: string]: React.CSSProperties } = {
     margin: "0 auto",
     gap: "20px",
   },
+  backBtn: {
+    position: "absolute",
+    top: "24px",
+    left: "24px",
+    background: "transparent",
+    border: "none",
+    color: "#475569",
+    cursor: "pointer",
+    fontSize: "15px",
+    fontWeight: 500,
+    padding: "8px",
+  },
   heading: {
     margin: "0 0 10px 0",
     fontSize: "24px",
@@ -485,6 +539,38 @@ const styles: { [key: string]: React.CSSProperties } = {
   oauthIcon: {
     width: "18px",
     height: "18px",
+  },
+  roleContainer: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "20px",
+  },
+  roleCard: {
+    background: "#f8fafc",
+    border: "2px solid #e2e8f0",
+    borderRadius: "12px",
+    padding: "24px",
+    cursor: "pointer",
+    textAlign: "left",
+    transition: "all 0.2s ease",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+  roleIcon: {
+    fontSize: "24px",
+    marginBottom: "8px",
+  },
+  roleTitle: {
+    margin: 0,
+    fontSize: "16px",
+    fontWeight: 600,
+    color: "#1e293b",
+  },
+  roleDesc: {
+    margin: 0,
+    fontSize: "13px",
+    color: "#64748b",
   },
 };
 

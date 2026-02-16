@@ -5,6 +5,7 @@ export interface FreelancerData {
   id: string;
   name: string;
   email: string;
+  role: "freelancer" | "client";
   title?: string;
   avatar?: string;
   totalEarned?: number;

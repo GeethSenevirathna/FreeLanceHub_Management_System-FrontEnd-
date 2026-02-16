@@ -41,13 +41,13 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
   return (
     <>
       <header style={styles.header}>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>My Projects</h1>
-        <p style={{ margin: "6px 0 0", color: "#6b7280", fontSize: 14 }}>Manage and track all your projects</p>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#111827" }}>Contracts</h1>
+        <p style={{ margin: "6px 0 0", color: "#6b7280", fontSize: 14 }}>Manage your active work and history</p>
       </header>
       <section style={styles.projectSection}>
         <div style={styles.projectHeader}>
           <div>
-            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>All Projects ({projects.length})</h2>
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>All Contracts ({projects.length})</h2>
           </div>
           <div style={styles.filterButtons}>
             <button onClick={() => setSelectedFilter("all")} style={{ ...styles.filterBtn, ...(selectedFilter === "all" ? styles.filterBtnActive : {}) }}>
